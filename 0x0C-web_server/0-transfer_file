@@ -1,0 +1,19 @@
+#!/usr/bin/bash
+# This script transfers a file from a client to a server
+
+if [ "$#" -lt 4 ]; then
+    echo "Usage: 0-transfer_file PATH_TO_FILE IP USERNAME PATH_TO_SSH_KEY"
+    exit 1
+fi
+
+# Assign the arguments to variables
+PATH_TO_FILE="$1"
+IP="$2"
+USERNAME="$3"
+PATH_TO_SSH_KEY="$4"
+
+# Build the command
+COMMAND="scp -o StrictHostKeyChecking=no -i $PATH_TO_SSH_KEY $PATH_TO_FILE $USERNAME@$IP:~/"
+
+# Execute command
+$COMMAND
