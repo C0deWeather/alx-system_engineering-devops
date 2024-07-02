@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# This script installs Nginx in a server and setups a server block
+
+# Update package list
+apt-get update -y
+
+# Install Nginx
+apt-get install -y nginx
+
+# Create a custom HTML file
+echo "Hello World!" > /var/www/html/index.html
+
+# Configure Nginx to listen on port 80
+# This block writes the Nginx configuration to the default site configuration file
+cat > /etc/nginx/sites-available/default << EOF
+server {
+    listen 80 default_server;       # Listen on port 80 (HTTP)
+    listen [::]:80 default_server;  # Listen on port 80 for IPv6
+
+    root /var/www/html;             # Set the root directory for website files
+    index index.html index.htm;     # Default files to serve
+
+    server_name _;                  # Wildcard for server name
+
+    location / {
+        try_files \$uri \$uri/ =404;  # Try to serve the file, if not found return 404
+    }
+}
+EOF
+
+# Test Nginx configuration for syntax errors
+nginx -t
+
+# Restart Nginx using the init script
+service nginx restart
+
