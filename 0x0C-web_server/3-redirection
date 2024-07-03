@@ -10,7 +10,25 @@ sudo apt-get install -y nginx
 # Create a custom HTML file
 echo "Hello World!" | sudo tee /var/www/html/index.html
 
-sudo sed -i '/location/i\    location /redirect_me {\n\treturn 301 codeweather.tech;\n\n    }' /etc/nginx/sites-available/default
+sudo tee /etc/nginx/sites-available/default <<  EOF
+server {
+    listen 80 default_server;       # Listen on port 80 (HTTP)
+    listen [::]:80 default_server;  # Listen on port 80 for IPv6
+
+    root /var/www/html;             # Set the root directory for website files
+    index index.html index.htm;     # Default files to serve
+
+    server_name _;                  # Wildcard for server name
+
+    location /redirect_me {
+        return 301 codeweather.tech;
+    }
+
+    location / {
+        try_files $uri $uri/ =404;  # Try to serve the file, if not found return 404
+    }
+}
+EOF
 
 # Test Nginx configuration for syntax errors
 sudo nginx -t
