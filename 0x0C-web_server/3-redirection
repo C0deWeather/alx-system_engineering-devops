@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# This script installs Nginx on a server and sets up a server block
+
+# Update package list
+sudo apt-get update -y
+
+# Install Nginx
+sudo apt-get install -y nginx
+
+# Create a custom HTML file
+echo "Hello World!" | sudo tee /var/www/html/index.html
+
+sudo sed -i '/location/i\    location /redirect_me {\n\treturn 301 codeweather.tech;\n\n    }' /etc/nginx/sites-available/default
+
+# Test Nginx configuration for syntax errors
+sudo nginx -t
+
+# Restart Nginx using the init script
+sudo service nginx restart
