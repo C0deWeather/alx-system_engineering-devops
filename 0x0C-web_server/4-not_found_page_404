@@ -9,7 +9,7 @@ sudo apt-get install -y nginx
 
 # Create a custom HTML file
 echo "Hello World!" | sudo tee /var/www/html/index.html
-echo "Ceci n'est pas une page" | sudo tee /var/www/html/error.html
+echo -e "Ceci n'est pas une page\n" | sudo tee /var/www/html/error.html
 
 sudo tee /etc/nginx/sites-available/default <<  EOF
 server {
