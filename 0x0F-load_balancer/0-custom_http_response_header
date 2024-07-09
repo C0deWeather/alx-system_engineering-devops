@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# This script installs Nginx on a server and sets up a server block
+
+# Update package list
+sudo apt-get update -y
+
+# Install Nginx
+sudo apt-get install -y nginx
+
+# Create a custom HTML file
+echo "Hello World!" | sudo tee /var/www/html/index.html
+sudo tee /var/www/html/error.html << EOF
+Ceci n'est pas une page
+
+EOF
+
+sudo tee /etc/nginx/sites-available/default <<  EOF
+server {
+    listen 80 default_server;       # Listen on port 80 (HTTP)
+    listen [::]:80 default_server;  # Listen on port 80 for IPv6
+
+    root /var/www/html;             # Set the root directory for website files
+    index index.html index.htm;     # Default files to serve
+
+    server_name _;                  # Wildcard for server name
+
+    # Add custom headers
+    add_header X-Served-By $(hostname);
+
+    location /redirect_me {
+        return 301 http://codeweather.tech;
+    }
+
+    error_page 404 /error.html;
+    location = /error.html {
+        internal;
+    }
+
+    location / {
+        try_files \$uri \$uri/ =404;  # Try to serve the file, if not found return 404
+    }
+}
+EOF
+
+# Test Nginx configuration for syntax errors
+sudo nginx -t
+
+# Restart Nginx using the init script
+sudo nginx -s reload
