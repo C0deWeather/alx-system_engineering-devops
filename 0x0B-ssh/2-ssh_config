@@ -1,0 +1,4 @@
+Host myserver
+	HostName 100.26.120.194
+	IdentityFile ~/.ssh/school
+	PasswordAuthentication no
