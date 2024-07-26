@@ -8,14 +8,11 @@ MYSQL_ROOT_PASSWORD=$1
 CURRENT_DATE=$(date +"%d-%m-%Y")
 
 # Define the filename for the MySQL dump and the archive
-DUMP_FILENAME="backup.sql"
+DUMP_FILE="backup.sql"
 ARCHIVE_FILENAME="${CURRENT_DATE}.tar.gz"
 
 # Create a MySQL dump of all databases
-mysqldump -u root -p"${MYSQL_ROOT_PASSWORD}" --all-databases > "${DUMP_FILENAME}"
+sudo mysqldump -u root -p"${MYSQL_ROOT_PASSWORD}" --all-databases > "${DUMP_FILE}"
 
 # Create a tar.gz archive of the MySQL dump
-tar -czf "${ARCHIVE_FILENAME}" "${DUMP_FILENAME}"
-
-# Remove the uncompressed MySQL dump file
-rm "${DUMP_FILENAME}"
+tar -czf "${ARCHIVE_FILENAME}" "${DUMP_FILE}"
