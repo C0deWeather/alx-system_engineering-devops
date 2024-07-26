@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 # This script generates a mysql dump and creates a compresssed archive
 # out of it.
 
